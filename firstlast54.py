@@ -108,18 +108,18 @@ print >>f, "AuthorId,DuplicateAuthorIds"
 """
 The next loop of code could be confusing.  I'll describe the general logc.
 I begin with each group of athors who share a last name and first inital.  
-Within that, i treat each type of commonality as a seperate case.  Some 
-pairs of authors have the exact same name, others have a similar first name
-or a similar middle initial.  Or maybe they have the same first name but one
+Within that, each type of commonality as a seperate case.  Some pairs of 
+authors have the exact same name, others have a similar first name or a 
+similar middle initial.  Or maybe they have the same first name but one
 is missing a middle nmae.  Each case is handled a little differently.
 
 But in general, these different treatments are similar.  I take the joint
 frequency of the least specific common parts of the 2 names, for instance
-F Last and First Last I would take the frequency of F Last.  Or First M Last
+F Last and First Last - I'll take the frequency of F Last.  Or First M Last
 and First Last I would take First Last.  I then usually count the number of
 times that the other name appears and I divide the frequency by the count 
-and allow the duplicate if it is under a certain threshold...why do I do it
-this way?
+and allow the duplicate if it is under a certain threshold. More common
+"joint frequencies" are more likely to be false duplicates.
 
 The idea is that a very common first and last name is less likely to be a true
 duplcate.  If the first name of one member of a pair is only a first initial, 
@@ -130,7 +130,7 @@ instance there are many records of "Albert Einstein" in the data.  There could
 also be a single record of "Alonzo Einstein".  I would like to match any 
 "A Einstein" with the former, not the latter. 
 """
-# Each group is all authors with the same last name and same first initial
+# Each group is made of all authors with the same last name and same first initial
 for name, group in groups:
     for id in group.index:
 	f.write(str(id) + ",")
@@ -242,7 +242,8 @@ for name, group in groups:
                     ##################### Same Middle ##############################
 		    """
                     Here I do something a little different, a name like F. Last may have many
-		    possible matches.  
+		    possible matches. The uniques variable below is used to count how many
+		    different first names are associated with this FI Last combo. 
 		    """
 		    if group['Mids'][id] == group['Mids'][dupe] or (pd.isnull(group['Mids'][id]) and pd.isnull(group['Mids'][dupe])):
 			countD += 1
@@ -266,9 +267,9 @@ for name, group in groups:
 	                        print >>f, dupe,
                     ################## 1 Middle Name Missing #####################
 		    """
-                    This block contains some non-obvious duplicate decisions, as well as the most lowest
-		    % of possible duplicates accepted.  So the logic that follows eventually became a 
-		    little tricky
+                    This block contains some non-obvious duplicate decisions. It also has the lowest
+		    % of possible duplicates accepted.  So the logic that follows is unfortunately a 
+		    little convoluated.
 		    """
 		    elif pd.isnull(group['Mids'][id]) or pd.isnull(group['Mids'][dupe]):
 			countE += 1
@@ -299,7 +300,7 @@ for name, group in groups:
 			    if pd.isnull(group['Mids'][id]) and group['First'][id].__len__()==1:
 				# Los and Cartwright are two names that I noticed did not appear to be good fits for the last set 
 				# of metrics I was using...there were multiple authors being matched by the algo that were clearly
-				# not matches to my eye under those names
+				# not matches for those last names
 			        if nlgratio * (freq / grp_len) < NoMidcutoff2 and group['Last'][id] not in ['los', 'cartwright']:
 	                            counte += 1
 				    countx += 1
@@ -339,7 +340,7 @@ for name, group in groups:
 			        print >>f, dupe,
 	        ################### End Same First Inital Block ######################
 	print >>f
-# Print some reporting / debugging statements
+# Print some reporting / debugging numbers
 print countA, countB, countC
 print counta, countb, countc
 print countG, countH, countI
