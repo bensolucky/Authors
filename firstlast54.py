@@ -266,11 +266,6 @@ for name, group in groups:
 	                        countd += 1
 	                        print >>f, dupe,
                     ################## 1 Middle Name Missing #####################
-		    """
-                    This block contains some non-obvious duplicate decisions. It also has the lowest
-		    % of possible duplicates accepted.  So the logic that follows is unfortunately a 
-		    little convoluated.
-		    """
 		    elif pd.isnull(group['Mids'][id]) or pd.isnull(group['Mids'][dupe]):
 			countE += 1
 		        if group['first_last_freq'][id] > group['first_last_freq'][dupe]:
