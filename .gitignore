@@ -1,0 +1,13 @@
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+*.pyc
+*.csv
+*.tsv
+subs/
+DarcGit/
+Track1/
+Track2/
