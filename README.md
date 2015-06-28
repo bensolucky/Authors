@@ -7,11 +7,15 @@ Copyright [2013] [Dmitry Efimov, Lucas Silva, Ben Solecki ] Licensed under the A
 
 Hardware/OS
 -----
-This was primarily developed on a 32 bit Windows laptop with 4MB RAM. A small number of more memory intensive steps were run on a friend's machine.
+This was primarily developed on a 64 bit Windows 7 laptop with 4MB RAM.
 
 3rd Party Software
 -----
 Python 2.7 with Pandas 10.1
+
+Notes:
+------
+This code has been published primarily to fulfill the winning conditions for the 2013 KDD competition.  It was developed very rapidly, over hundreds of daily itereations, and was never meant to be "production quality" in any way.  It's left here as an example of how the 2013 KDD cup was solved, for anyone who is curious about this contest.
 
 To Run
 ------
